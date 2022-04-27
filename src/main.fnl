@@ -33,9 +33,9 @@
   (love.graphics.setColor 1 1 1)
   (love.graphics.print (.. "Points: " (length (. state :tail))) 10 10 0 1 1 0 0))
 
-(fn debug-draw []
-  (love.graphics.setColor 1 1 1)
-  (love.graphics.print (.. "speed: " speed) 10 40 0 1 1 0 0))
+;(fn debug-draw []
+; (love.graphics.setColor 1 1 1)
+;  (love.graphics.print (.. "speed: " speed) 10 40 0 1 1 0 0))
 
 (fn spawn-food []
   (math.randomseed (os.time))
@@ -128,5 +128,6 @@
   (snake-draw)
   (food-draw food-x food-y)
   (points-draw)
-  (debug-draw))
+;  (debug-draw)
+  )
 

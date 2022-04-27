@@ -23,10 +23,6 @@ local function points_draw()
   love.graphics.setColor(1, 1, 1)
   return love.graphics.print(("Points: " .. #state.tail), 10, 10, 0, 1, 1, 0, 0)
 end
-local function debug_draw()
-  love.graphics.setColor(1, 1, 1)
-  return love.graphics.print(("speed: " .. speed), 10, 40, 0, 1, 1, 0, 0)
-end
 local function spawn_food()
   math.randomseed(os.time())
   local newX = math.random(45)
@@ -125,7 +121,6 @@ end
 love.draw = function()
   snake_draw()
   food_draw(food_x, food_y)
-  points_draw()
-  return debug_draw()
+  return points_draw()
 end
 return love.draw
