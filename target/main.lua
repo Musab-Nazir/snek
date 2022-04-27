@@ -1,6 +1,7 @@
 local state = {x = 20, y = 20, tail = {}}
 local unit_size = 20
 local speed = 10
+local speed_factor = 1
 local food_x = 0
 local food_y = 0
 local axis = "x"
@@ -18,9 +19,13 @@ local function food_draw(x, y)
   love.graphics.setColor(0.863, 0.648, 0.38)
   return love.graphics.rectangle("fill", (food_x * unit_size), (food_y * unit_size), unit_size, unit_size)
 end
+local function points_draw()
+  love.graphics.setColor(1, 1, 1)
+  return love.graphics.print(("Points: " .. #state.tail), 10, 10, 0, 1, 1, 0, 0)
+end
 local function spawn_food()
   math.randomseed(os.time())
-  local newX = math.random(50)
+  local newX = math.random(40)
   local newY = math.random(40)
   food_x = newX
   food_y = newY
@@ -36,13 +41,13 @@ local function snake_update(deltaTime)
   end
   if ((state.x * unit_size) > love.graphics.getWidth()) then
     state["x"] = 0
-  elseif (state.x <= 0) then
+  elseif (state.x < 0) then
     state["x"] = 50
   else
   end
   if ((state.y * unit_size) > love.graphics.getHeight()) then
     state["y"] = 0
-  elseif (state.y <= 0) then
+  elseif (state.y < 0) then
     state["y"] = 40
   else
   end
@@ -57,8 +62,15 @@ local function snake_update(deltaTime)
     end
   else
   end
+  for idx, value in ipairs(state.tail) do
+    if ((state.x == value[1]) and (state.y == value[2])) then
+      love.event.quit()
+    else
+    end
+  end
   if ((food_x == state.x) and (food_y == state.y)) then
     spawn_food()
+    speed_factor = (1 + speed_factor)
     return table.insert(state.tail, {((state.x * unit_size) - unit_size), ((state.y * unit_size) - unit_size)})
   else
     return nil
@@ -68,20 +80,26 @@ love.load = function()
   return spawn_food()
 end
 love.update = function(deltaTime)
-  speed = (speed - 1)
+  speed = (speed - speed_factor)
   if (love.keyboard.isDown("d") or love.keyboard.isDown("a")) then
-    axis = "x"
-    if love.keyboard.isDown("a") then
-      direction = "-"
+    if ("y" == axis) then
+      axis = "x"
+      if love.keyboard.isDown("a") then
+        direction = "-"
+      else
+        direction = "+"
+      end
     else
-      direction = "+"
     end
   elseif (love.keyboard.isDown("s") or love.keyboard.isDown("w")) then
-    axis = "y"
-    if love.keyboard.isDown("s") then
-      direction = "+"
+    if ("x" == axis) then
+      axis = "y"
+      if love.keyboard.isDown("s") then
+        direction = "+"
+      else
+        direction = "-"
+      end
     else
-      direction = "-"
     end
   else
   end
@@ -94,6 +112,7 @@ love.update = function(deltaTime)
 end
 love.draw = function()
   snake_draw()
-  return food_draw(food_x, food_y)
+  food_draw(food_x, food_y)
+  return points_draw()
 end
 return love.draw
