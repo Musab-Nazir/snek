@@ -31,13 +31,16 @@
 
 (fn points-draw []
   (love.graphics.setColor 1 1 1)
-  (love.graphics.print (.. "Points: " (length (. state :tail))) 10 10 0 1 1 0 0)
-)
+  (love.graphics.print (.. "Points: " (length (. state :tail))) 10 10 0 1 1 0 0))
+
+(fn debug-draw []
+  (love.graphics.setColor 1 1 1)
+  (love.graphics.print (.. "food: " food-x " " food-y) 10 40 0 1 1 0 0))
 
 (fn spawn-food []
   (math.randomseed (os.time))
-  (let [newX (math.random 40)
-        newY (math.random 40)]
+  (let [newX (math.random 45)
+        newY (math.random 39)]
   (set food-x  newX)
   (set food-y newY)))
 
@@ -70,15 +73,13 @@
       (table.remove (. state :tail) (+ idx 1))
       ; update old cords
       (set old-x x)
-      (set old-y y)
-  ))
+      (set old-y y)))
+
   ; self collision
   (each [idx value (ipairs (. state :tail))]
     (if (and (= (. state :x) (. value 1)) (= (. state :y) (. value 2)))
       ; game over
-      (love.event.quit)
-    )
-  )
+      (love.event.quit)))
   ; food collision
   (when (and (= food-x (. state :x)) (= food-y (. state :y)))
     ; spawn food at new location
@@ -121,5 +122,6 @@
   "Draw the snake and food"
   (snake-draw)
   (food-draw food-x food-y)
-  (points-draw))
+  (points-draw)
+  (debug-draw))
 
