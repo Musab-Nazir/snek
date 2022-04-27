@@ -1,9 +1,10 @@
 # snek
-Simple snake game in fennel. Using the [Love framework](https://love2d.org/)
+Simple snake game in fennel. Made with [Love](https://love2d.org/)
 
-`main.fnl` contains the source code that can be compiled to lua via:
+The `src/` directory contains the source code that can be compiled to lua via:
 ```
-fennel --compile main.fnl > main.lua
+fennel --compile src/main.fnl > target/main.lua
+fennel -- compile src/conf.fnl > target/conf.lua
 ```
 To run the game (assuming you have the love binary installed) on Mac OS I use
 ```
