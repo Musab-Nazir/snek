@@ -1,6 +1,6 @@
 local state = {x = 20, y = 20, tail = {}}
 local unit_size = 20
-local speed = 10
+local speed = 0
 local speed_factor = 1
 local food_x = 0
 local food_y = 0
@@ -25,7 +25,7 @@ local function points_draw()
 end
 local function debug_draw()
   love.graphics.setColor(1, 1, 1)
-  return love.graphics.print(("food: " .. food_x .. " " .. food_y), 10, 40, 0, 1, 1, 0, 0)
+  return love.graphics.print(("speed: " .. speed), 10, 40, 0, 1, 1, 0, 0)
 end
 local function spawn_food()
   math.randomseed(os.time())
@@ -74,7 +74,6 @@ local function snake_update(deltaTime)
   end
   if ((food_x == state.x) and (food_y == state.y)) then
     spawn_food()
-    speed_factor = (1 + speed_factor)
     return table.insert(state.tail, {((state.x * unit_size) - unit_size), ((state.y * unit_size) - unit_size)})
   else
     return nil
@@ -108,7 +107,16 @@ love.update = function(deltaTime)
   else
   end
   if (speed < 0) then
-    speed = 10
+    if (#state.tail <= 5) then
+      speed = 15
+    elseif (#state.tail <= 15) then
+      speed = 10
+    elseif (#state.tail <= 25) then
+      speed = 5
+    elseif (#state.tail <= 35) then
+      speed = 1
+    else
+    end
     return snake_update(deltaTime)
   else
     return nil

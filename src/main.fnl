@@ -5,7 +5,7 @@
 
 (local unit-size 20)
 ; Mutable state
-(var speed 10)
+(var speed 0)
 (var speed-factor 1)
 (var food-x 0) 
 (var food-y 0)
@@ -35,7 +35,7 @@
 
 (fn debug-draw []
   (love.graphics.setColor 1 1 1)
-  (love.graphics.print (.. "food: " food-x " " food-y) 10 40 0 1 1 0 0))
+  (love.graphics.print (.. "speed: " speed) 10 40 0 1 1 0 0))
 
 (fn spawn-food []
   (math.randomseed (os.time))
@@ -84,8 +84,6 @@
   (when (and (= food-x (. state :x)) (= food-y (. state :y)))
     ; spawn food at new location
     (spawn-food)
-    ; increase speed
-    (set speed-factor (+ 1 speed-factor))
     ; add tail
     (table.insert (. state :tail) [(- (* (. state :x) unit-size) unit-size) (- (* (. state :y) unit-size) unit-size)])))
 
@@ -114,7 +112,14 @@
   
   (when (<  speed 0) 
     (do 
-      (set speed 10)
+      (if (<= (length (. state :tail)) 5)
+        (set speed 15)
+      (<= (length (. state :tail)) 15)
+        (set speed 10)
+      (<= (length (. state :tail)) 25)
+        (set speed 5)
+      (<= (length (. state :tail)) 35)
+        (set speed 1))
       (snake-update deltaTime))))
 
 ; Render
