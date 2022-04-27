@@ -131,5 +131,6 @@
   "Draw the snake and food"
   (snake-draw)
   (food-draw food-x food-y)
-  (points-draw))
+  (points-draw)
+  (love.graphics.print (.. "FPS: " (love.timer.getFPS)) 10 40 0 1 1 0 0))
 

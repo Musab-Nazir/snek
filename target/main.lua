@@ -1,5 +1,5 @@
-local state = {x = 20, y = 20, tail = {}}
 local unit_size = 20
+local state = {x = 20, y = 20, tail = {}}
 local speed = 0
 local speed_factor = 1
 local food_x = 0
@@ -121,6 +121,7 @@ end
 love.draw = function()
   snake_draw()
   food_draw(food_x, food_y)
-  return points_draw()
+  points_draw()
+  return love.graphics.print(("FPS: " .. love.timer.getFPS()), 10, 40, 0, 1, 1, 0, 0)
 end
 return love.draw
