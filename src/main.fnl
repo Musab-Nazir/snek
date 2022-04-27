@@ -1,10 +1,10 @@
 ; Init State
+(local unit-size 20)
+
+; Mutable state
 (local state {:x 20
               :y 20
               :tail []})
-
-(local unit-size 20)
-; Mutable state
 (var speed 0)
 (var speed-factor 1)
 (var food-x 0) 
@@ -23,19 +23,23 @@
                             unit-size)
   ; tail
   (each [_ value (ipairs (. state :tail))]
-    (love.graphics.rectangle "fill" (* (. value 1) unit-size) (* (. value 2) unit-size) unit-size unit-size)))
+    (love.graphics.rectangle "fill" 
+                              (* (. value 1) unit-size) 
+                              (* (. value 2) unit-size) 
+                              unit-size 
+                              unit-size)))
 
 (fn food-draw [x y]
   (love.graphics.setColor 0.863 0.648 0.38)
-  (love.graphics.rectangle "fill" (* food-x unit-size) (* food-y unit-size) unit-size unit-size))
+  (love.graphics.rectangle "fill" 
+                            (* food-x unit-size) 
+                            (* food-y unit-size) 
+                            unit-size 
+                            unit-size))
 
 (fn points-draw []
   (love.graphics.setColor 1 1 1)
   (love.graphics.print (.. "Points: " (length (. state :tail))) 10 10 0 1 1 0 0))
-
-;(fn debug-draw []
-; (love.graphics.setColor 1 1 1)
-;  (love.graphics.print (.. "speed: " speed) 10 40 0 1 1 0 0))
 
 (fn spawn-food []
   (math.randomseed (os.time))
@@ -127,7 +131,5 @@
   "Draw the snake and food"
   (snake-draw)
   (food-draw food-x food-y)
-  (points-draw)
-;  (debug-draw)
-  )
+  (points-draw))
 
