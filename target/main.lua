@@ -6,7 +6,8 @@ local food_y = 480
 local axis = "x"
 local direction = "+"
 local function snake_draw()
-  love.graphics.setColor(220, 165, 97)
+  love.graphics.setBackgroundColor(0.121, 0.121, 0.157)
+  love.graphics.setColor(0.462, 0.58, 0.416)
   return love.graphics.rectangle("fill", state.x, state.y, (state.length * unit_size), unit_size)
 end
 local function snake_update(deltaTime)
@@ -32,7 +33,7 @@ local function snake_update(deltaTime)
   end
 end
 local function food_draw(x, y)
-  love.graphics.setColor(118, 148, 106)
+  love.graphics.setColor(0.863, 0.648, 0.38)
   return love.graphics.rectangle("fill", x, y, unit_size, unit_size)
 end
 love.load = function()

@@ -12,7 +12,8 @@
 (var direction "+")
 
 (fn snake-draw []
-  (love.graphics.setColor 220 165 97)
+  (love.graphics.setBackgroundColor 0.121 0.121 0.157)
+  (love.graphics.setColor 0.462 0.580 0.4160)
   (love.graphics.rectangle  "fill" 
                             (. state :x) 
                             (. state :y) 
@@ -39,7 +40,7 @@
       )
 
 (fn food-draw [x y]
-  (love.graphics.setColor 118 148 106)
+  (love.graphics.setColor 0.863 0.648 0.38)
   (love.graphics.rectangle "fill" x y unit-size unit-size))
 
 (fn love.load []
