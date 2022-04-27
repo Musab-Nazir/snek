@@ -1,7 +1,7 @@
 ; Init State
-(local state {:length 1
-              :x 20
-              :y 20})
+(local state {:x 20
+              :y 20
+              :tail []})
 
 (local unit-size 20)
 ; Mutable state
@@ -14,11 +14,19 @@
 (fn snake-draw []
   (love.graphics.setBackgroundColor 0.121 0.121 0.157)
   (love.graphics.setColor 0.462 0.580 0.4160)
+  ; head
   (love.graphics.rectangle  "fill" 
                             (* (. state :x) unit-size)
                             (* (. state :y) unit-size)
-                            (* (. state :length) unit-size) 
-                            unit-size))
+                            unit-size 
+                            unit-size)
+  ; tail
+  (each [_ value (ipairs (. state :tail))]
+    (love.graphics.rectangle "fill" (* (. value 1) unit-size) (* (. value 2) unit-size) unit-size unit-size)))
+
+(fn food-draw [x y]
+  (love.graphics.setColor 0.863 0.648 0.38)
+  (love.graphics.rectangle "fill" (* food-x unit-size) (* food-y unit-size) unit-size unit-size))
 
 (fn spawn-food []
   (math.randomseed (os.time))
@@ -28,6 +36,8 @@
   (set food-y newY)))
 
 (fn snake-update [deltaTime]
+  (var old-x (. state :x))
+  (var old-y (. state :y))
   ; movement
   (if (= direction "+")
       (tset state axis (+ (. state axis) 1))
@@ -43,14 +53,29 @@
       (<= (. state :y) 0)
       (tset state :y 40))
 
+  (if (> (length (. state :tail)) 0)
+    (each [idx value (ipairs (. state :tail))]
+      (local x (. value 1))
+      (local y (. value 2))
+      ; update the tail cords to the head's previous cords
+      (table.insert (. state :tail) idx [old-x old-y])
+      ; remove the old cords
+      (table.remove (. state :tail) (+ idx 1))
+      ; update old cords
+      (set old-x x)
+      (set old-y y)
+  ))
+
   ; collision
   (when (and (= food-x (. state :x)) (= food-y (. state :y)))
-    (spawn-food)))
+    ; spawn food at new location
+    (spawn-food)
+    ; add tail
+    (table.insert (. state :tail) [(- (* (. state :x) unit-size) unit-size) (- (* (. state :y) unit-size) unit-size)])))
 
-(fn food-draw [x y]
-  (love.graphics.setColor 0.863 0.648 0.38)
-  (love.graphics.rectangle "fill" (* food-x unit-size) (* food-y unit-size) unit-size unit-size))
 
+
+; Load
 (fn love.load []
   (spawn-food))
 
