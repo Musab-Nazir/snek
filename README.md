@@ -14,3 +14,8 @@ To run the game (assuming you have the love binary installed) on Mac OS I use
 ```
 open -n -a love ~/path/to/main.lua
 ```
+
+To create a binary with the contents of the target directory, cd into `target`:
+```
+zip -9 -r snek.love .
+```
