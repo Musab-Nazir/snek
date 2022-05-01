@@ -20,9 +20,11 @@ local function points_draw()
   return love.graphics.print(("Points: " .. #snake_state.tail), 10, 10, 0, 1, 1, 0, 0)
 end
 local function spawn_food()
+  local height_limit = math.floor(((love.graphics.getHeight() - 100) / unit_size))
+  local width_limit = math.floor((love.graphics.getWidth() / unit_size))
   math.randomseed(os.time())
-  local newX = math.random(45)
-  local newY = math.random(39)
+  local newX = math.random(width_limit)
+  local newY = math.random(height_limit)
   do end (food_state)["x"] = newX
   food_state["y"] = newY
   return nil
@@ -30,6 +32,8 @@ end
 local function snake_update(deltaTime)
   local direction = snake_state.direction
   local axis = snake_state.axis
+  local height_limit = math.floor((love.graphics.getHeight() / unit_size))
+  local width_limit = math.floor((love.graphics.getWidth() / unit_size))
   local old_x = snake_state.x
   local old_y = snake_state.y
   if (direction == "+") then
@@ -40,13 +44,13 @@ local function snake_update(deltaTime)
   if ((snake_state.x * unit_size) > love.graphics.getWidth()) then
     snake_state["x"] = 0
   elseif (snake_state.x < 0) then
-    snake_state["x"] = 50
+    snake_state["x"] = width_limit
   else
   end
   if ((snake_state.y * unit_size) > love.graphics.getHeight()) then
     snake_state["y"] = 0
   elseif (snake_state.y < 0) then
-    snake_state["y"] = 40
+    snake_state["y"] = height_limit
   else
   end
   if (#snake_state.tail > 0) then
@@ -123,6 +127,7 @@ love.draw = function()
   snake_draw()
   food_draw(food_state.x, food_state.y)
   points_draw()
-  return love.graphics.print(("FPS: " .. love.timer.getFPS()), 10, 40, 0, 1, 1, 0, 0)
+  love.graphics.print(("Food-x: " .. food_state.x .. " Food-y: " .. food_state.y), 10, 50, 0, 1, 1, 0, 0)
+  return love.graphics.print(("Snake-head: " .. snake_state.x .. " " .. snake_state.y), 10, 40, 0, 1, 1, 0, 0)
 end
 return love.draw

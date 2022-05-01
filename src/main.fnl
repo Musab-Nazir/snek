@@ -42,15 +42,19 @@
   (love.graphics.print (.. "Points: " (length (. snake-state :tail))) 10 10 0 1 1 0 0))
 
 (fn spawn-food []
+  (let [height-limit (math.floor (/ (- (love.graphics.getHeight) 100) unit-size))
+        width-limit (math.floor (/ (love.graphics.getWidth) unit-size))]
   (math.randomseed (os.time))
-  (let [newX (math.random 45)
-        newY (math.random 39)]
+  (let [newX (math.random width-limit)
+        newY (math.random height-limit)]
   (tset food-state :x newX)
-  (tset food-state :y newY)))
+  (tset food-state :y newY))))
 
 (fn snake-update [deltaTime]
   (let [direction (. snake-state :direction)
-        axis (. snake-state :axis)]
+        axis (. snake-state :axis)
+        height-limit (math.floor (/ (love.graphics.getHeight) unit-size))
+        width-limit (math.floor (/ (love.graphics.getWidth) unit-size))]
   (var old-x (. snake-state :x))
   (var old-y (. snake-state :y))
   ; movement
@@ -62,11 +66,11 @@
   (if (> (* (. snake-state :x) unit-size) (love.graphics.getWidth))
       (tset snake-state :x 0)
       (< (. snake-state :x) 0)
-      (tset snake-state :x 50))
+      (tset snake-state :x width-limit))
   (if (> (* (. snake-state :y) unit-size) (love.graphics.getHeight))
       (tset snake-state :y 0)
       (< (. snake-state :y) 0)
-      (tset snake-state :y 40))
+      (tset snake-state :y height-limit))
 
   ; tail updates
   (if (> (length (. snake-state :tail)) 0)
@@ -139,5 +143,6 @@
   (snake-draw)
   (food-draw (. food-state :x) (. food-state :y))
   (points-draw)
-  (love.graphics.print (.. "FPS: " (love.timer.getFPS)) 10 40 0 1 1 0 0))
+  (love.graphics.print (.. "Food-x: " (. food-state :x) " Food-y: " (. food-state :y)) 10 50 0 1 1 0 0)
+  (love.graphics.print (.. "Snake-head: " (. snake-state :x) " " (. snake-state :y)) 10 40 0 1 1 0 0))
 
