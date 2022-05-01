@@ -41,16 +41,16 @@ local function snake_update(deltaTime)
   else
     snake_state[axis] = (snake_state[axis] - 1)
   end
-  if ((snake_state.x * unit_size) > love.graphics.getWidth()) then
+  if (snake_state.x >= width_limit) then
     snake_state["x"] = 0
   elseif (snake_state.x < 0) then
-    snake_state["x"] = width_limit
+    snake_state["x"] = (width_limit - 1)
   else
   end
-  if ((snake_state.y * unit_size) > love.graphics.getHeight()) then
+  if (snake_state.y >= height_limit) then
     snake_state["y"] = 0
   elseif (snake_state.y < 0) then
-    snake_state["y"] = height_limit
+    snake_state["y"] = (height_limit - 1)
   else
   end
   if (#snake_state.tail > 0) then
@@ -126,8 +126,6 @@ end
 love.draw = function()
   snake_draw()
   food_draw(food_state.x, food_state.y)
-  points_draw()
-  love.graphics.print(("Food-x: " .. food_state.x .. " Food-y: " .. food_state.y), 10, 50, 0, 1, 1, 0, 0)
-  return love.graphics.print(("Snake-head: " .. snake_state.x .. " " .. snake_state.y), 10, 40, 0, 1, 1, 0, 0)
+  return points_draw()
 end
 return love.draw

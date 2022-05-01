@@ -63,14 +63,14 @@
       (tset snake-state axis (- (. snake-state axis) 1)))
   
   ; out of bounds
-  (if (> (* (. snake-state :x) unit-size) (love.graphics.getWidth))
+  (if (>= (. snake-state :x) width-limit)
       (tset snake-state :x 0)
       (< (. snake-state :x) 0)
-      (tset snake-state :x width-limit))
-  (if (> (* (. snake-state :y) unit-size) (love.graphics.getHeight))
+      (tset snake-state :x (- width-limit 1)))
+  (if (>= (. snake-state :y) height-limit)
       (tset snake-state :y 0)
       (< (. snake-state :y) 0)
-      (tset snake-state :y height-limit))
+      (tset snake-state :y (- height-limit 1)))
 
   ; tail updates
   (if (> (length (. snake-state :tail)) 0)
@@ -143,6 +143,7 @@
   (snake-draw)
   (food-draw (. food-state :x) (. food-state :y))
   (points-draw)
-  (love.graphics.print (.. "Food-x: " (. food-state :x) " Food-y: " (. food-state :y)) 10 50 0 1 1 0 0)
-  (love.graphics.print (.. "Snake-head: " (. snake-state :x) " " (. snake-state :y)) 10 40 0 1 1 0 0))
+  ;; (love.graphics.print (.. "Food-x: " (. food-state :x) " Food-y: " (. food-state :y)) 10 50 0 1 1 0 0)
+  ;; (love.graphics.print (.. "Snake-head: " (. snake-state :x) " " (. snake-state :y)) 10 40 0 1 1 0 0)
+  )
 
